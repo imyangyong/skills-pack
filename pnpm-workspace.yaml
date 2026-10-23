@@ -13,6 +13,9 @@ allowBuilds:
   esbuild: true
   simple-git-hooks: true
 
+catalog:
+  '@clack/prompts': ^1.8.1
+
 catalogs:
   cli:
     '@antfu/eslint-config': ^9.5.1

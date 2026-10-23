@@ -22,6 +22,7 @@
   },
   "scripts": {
     "gen": "tsx scripts/gen.ts",
+    "sync": "tsx scripts/sync-global.ts",
     "lint": "pnpm run gen --check && eslint",
     "release": "bumpp",
     "test": "tsx scripts/test.ts",
@@ -30,6 +31,7 @@
   },
   "scripts-info": {
     "gen": "Sync package.json `skills` field and README table from meta.ts",
+    "sync": "Interactively symlink selected skills to ~/.agents/skills and ~/.claude/skills",
     "lint": "Check generated files are in sync and code style",
     "release": "Bump version and publish a release",
     "test": "Install the pack into a temp project and verify every skill lands",
@@ -126,6 +128,7 @@
   ],
   "devDependencies": {
     "@antfu/eslint-config": "catalog:cli",
+    "@clack/prompts": "catalog:",
     "@types/node": "catalog:types",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",
