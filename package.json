@@ -1,18 +1,10 @@
 {
-  "name": "@antfu/skills",
+  "name": "@imyangyong/skills",
   "type": "module",
-  "version": "0.1.2",
+  "version": "0.1.0",
   "packageManager": "pnpm@12.15.0",
-  "description": "Anthony's curated agent skills, one `npm i` away",
-  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+  "description": "skills collection",
   "license": "MIT",
-  "funding": "https://github.com/sponsors/antfu",
-  "homepage": "https://github.com/antfu/skills-pack#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/antfu/skills-pack.git"
-  },
-  "bugs": "https://github.com/antfu/skills-pack/issues",
   "keywords": [
     "agent",
     "skills",
@@ -46,18 +38,37 @@
   },
   "skills": [
     {
+      "source": "imyangyong/skills",
+      "skills": [
+        "code-review",
+        "yong-coding-preferences",
+        "decode-terms",
+        "optimize-code"
+      ]
+    },
+    {
       "source": "mattpocock/skills",
       "skills": [
+        "setup-matt-pocock-skills",
         "grill-me",
         "grilling",
+        "grill-with-docs",
+        "to-spec",
+        "to-tickets",
+        "implement-spec",
+        "implement",
         "handoff",
         "to-questionnaire",
         "writing-for-agents",
+        "wait-what",
         "teach",
-        "code-review",
         "codebase-design",
         "research",
-        "tdd"
+        "retro",
+        "tdd",
+        "diagnosing-bugs",
+        "domain-modeling",
+        "wayfinder"
       ]
     },
     "shadcn/improve",
