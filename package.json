@@ -47,6 +47,26 @@
       ]
     },
     {
+      "source": "larksuite/cli",
+      "skills": [
+        "lark-apps",
+        "lark-base",
+        "lark-calendar",
+        "lark-contact",
+        "lark-doc",
+        "lark-drive",
+        "lark-im",
+        "lark-meeting",
+        "lark-okr",
+        "lark-openapi-explorer",
+        "lark-shared",
+        "lark-task",
+        "lark-whiteboard",
+        "lark-wiki",
+        "lark-workflow-meeting-summary"
+      ]
+    },
+    {
       "source": "mattpocock/skills",
       "skills": [
         "setup-matt-pocock-skills",
