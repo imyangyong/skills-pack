@@ -1,7 +1,7 @@
 import type { Source } from '../meta'
 import { readFile, writeFile } from 'node:fs/promises'
 import process from 'node:process'
-import { parse as parseYaml } from 'yaml'
+import { parseDocument as parseYamlDocument } from 'yaml'
 import { sources } from '../meta'
 
 const check = process.argv.includes('--check')
@@ -111,7 +111,7 @@ function skillPaths(paths: string[], subpath: string) {
   ].map(p => prefix + p)
 }
 
-async function fetchUpstream(source: string): Promise<UpstreamSkill[]> {
+async function fetchUpstream(source: string, wanted?: string[]): Promise<UpstreamSkill[]> {
   const { owner, repo, subpath } = splitSource(source)
   const tree = await github<{ tree: { path: string }[] }>(`repos/${owner}/${repo}/git/trees/HEAD?recursive=1`)
   const paths = skillPaths(tree.tree.map(e => e.path), subpath)
@@ -119,8 +119,14 @@ async function fetchUpstream(source: string): Promise<UpstreamSkill[]> {
     const raw = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/HEAD/${path}`).then(r => r.text())
     const frontmatter = /^---\n([\s\S]*?)\n---/.exec(raw)?.[1] ?? ''
     // Frontmatter is free-form YAML; only these two keys matter and both are checked below.
-    const { name, description } = parseYaml(frontmatter) as { name?: string, description?: string }
+    const document = parseYamlDocument(frontmatter)
+    if (document.errors.length)
+      throw document.errors[0]
+    const name = document.get('name') as string | undefined
     const folder = path.split('/').at(-2) ?? name ?? ''
+    if (wanted && !wanted.includes(name ?? '') && !wanted.includes(folder))
+      return
+    const description = document.get('description') as string | undefined
     return {
       name: name ?? folder,
       folder,
@@ -128,8 +134,9 @@ async function fetchUpstream(source: string): Promise<UpstreamSkill[]> {
       description: summary(description ?? ''),
     }
   }))
+  const selected = skills.filter(s => s !== undefined)
   // Same rule as the `skills` CLI: first skill per name wins.
-  return [...new Map(skills.toReversed().map(s => [s.name, s])).values()].toReversed()
+  return [...new Map(selected.toReversed().map(s => [s.name, s])).values()].toReversed()
 }
 
 async function rowsFor(source: Source, existing: Map<string, Row>): Promise<Row[]> {
@@ -151,7 +158,7 @@ async function rowsFor(source: Source, existing: Map<string, Row>): Promise<Row[
     return known.filter(r => r !== undefined)
   }
 
-  const upstream = await fetchUpstream(source.source)
+  const upstream = await fetchUpstream(source.source, wanted)
   const byName = new Map(upstream.flatMap(s => [[s.name, s], [s.folder, s]] as const))
   const names = wanted ?? upstream.map(s => s.name).sort()
   return names.map((name) => {
