@@ -15,6 +15,7 @@ export const sources: Source[] = [
       'yong-coding-preferences',
       'decode-terms',
       'optimize-code',
+      'grilling',
     ],
   },
   {
@@ -44,7 +45,6 @@ export const sources: Source[] = [
     skills: [
       'setup-matt-pocock-skills',
       'grill-me',
-      'grilling',
       'grill-with-docs',
       'to-spec',
       'to-tickets',

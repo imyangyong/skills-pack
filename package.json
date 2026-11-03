@@ -22,6 +22,7 @@
   },
   "scripts": {
     "gen": "tsx scripts/gen.ts",
+    "install": "pnpm dlx skills experimental_sync",
     "sync": "tsx scripts/sync-global.ts",
     "lint": "pnpm run gen --check && eslint",
     "release": "bumpp",
@@ -45,7 +46,8 @@
         "code-review",
         "yong-coding-preferences",
         "decode-terms",
-        "optimize-code"
+        "optimize-code",
+        "grilling"
       ]
     },
     {
@@ -73,7 +75,6 @@
       "skills": [
         "setup-matt-pocock-skills",
         "grill-me",
-        "grilling",
         "grill-with-docs",
         "to-spec",
         "to-tickets",

@@ -116,6 +116,12 @@ async function fetchUpstream(source: string, wanted?: string[]): Promise<Upstrea
   const tree = await github<{ tree: { path: string }[] }>(`repos/${owner}/${repo}/git/trees/HEAD?recursive=1`)
   const paths = skillPaths(tree.tree.map(e => e.path), subpath)
   const skills = await Promise.all(paths.map(async (path) => {
+    const folder = path.split('/').at(-2) ?? ''
+    // Filter by folder before fetching: unwanted skills may have invalid YAML
+    // frontmatter upstream, and parsing them would fail the whole run.
+    // `wanted` entries must match folder names (a name-only match now throws "not found").
+    if (wanted && !wanted.includes(folder))
+      return
     const raw = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/HEAD/${path}`).then(r => r.text())
     const frontmatter = /^---\n([\s\S]*?)\n---/.exec(raw)?.[1] ?? ''
     // Frontmatter is free-form YAML; only these two keys matter and both are checked below.
@@ -123,9 +129,6 @@ async function fetchUpstream(source: string, wanted?: string[]): Promise<Upstrea
     if (document.errors.length)
       throw document.errors[0]
     const name = document.get('name') as string | undefined
-    const folder = path.split('/').at(-2) ?? name ?? ''
-    if (wanted && !wanted.includes(name ?? '') && !wanted.includes(folder))
-      return
     const description = document.get('description') as string | undefined
     return {
       name: name ?? folder,
